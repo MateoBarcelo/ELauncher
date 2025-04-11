@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@azure/msal-node": "^3.5.0",
     "@mclc/main": "^4.0.0",
     "@xmcl/core": "^2.13.0",
     "@xmcl/installer": "^5.4.0",
