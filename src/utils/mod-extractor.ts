@@ -13,7 +13,7 @@ const createDestinationPath = () => {
   }
 };
 
-export const copyMods = () => {
+export const insertMods = () => {
   createDestinationPath();
   console.log("Copying mods from resources to mods folder...");
   console.log(`Source path: ${sourcePath}`);
