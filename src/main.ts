@@ -15,13 +15,12 @@ import {
 } from "@xmcl/installer";
 import { launch, MinecraftLocation, Version } from "@xmcl/core";
 import { GAME_FOLDER } from "./utils/locations";
-import { copyMods } from "./utils/mod-extractor";
+import { insertMods } from "./utils/mod-extractor";
 import { Agent } from "undici";
 import { loadFabric } from "./loaders/fabric";
 import { loadNeoforge } from "./loaders/neoforge";
 import { loadForge } from "./loaders/forge";
-
-const authManager = new Auth("select_account");
+import { auth } from "./auth/auth-manager";
 
 const GAME_VERSION = "1.20.2";
 
@@ -57,13 +56,7 @@ async function start(loader: string) {
   const aVersion: MinecraftVersion =
     list.find((v) => v.id == GAME_VERSION) || list[0]; // i just pick the first version in list here
 
-  const xboxManager = await authManager.launch("raw");
-
-  const token = await xboxManager.getMinecraft();
-
-  if (!token || !token.profile) {
-    return console.log("Failed to get Minecraft token");
-  }
+  const authentication = await auth();
 
   console.log("Downloading Minecraft", aVersion.id);
   await install(aVersion, GAME_FOLDER, {
@@ -74,7 +67,7 @@ async function start(loader: string) {
   });
   console.log("Installed Minecraft");
 
-  copyMods();
+  insertMods();
 
   let gameVersion;
 
@@ -112,10 +105,10 @@ async function start(loader: string) {
 
   console.log("Installed dependencies");
   await launch({
-    accessToken: token.mcToken,
+    accessToken: authentication.accessToken,
     gameProfile: {
-      id: token.profile.id,
-      name: token.profile.name,
+      id: authentication.profile.id,
+      name: authentication.profile.name,
     },
     version: gameVersion,
     gamePath: GAME_FOLDER,
