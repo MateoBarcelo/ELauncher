@@ -18,10 +18,17 @@ import { GAME_FOLDER } from "./utils/locations";
 import { copyMods } from "./utils/mod-extractor";
 import { Agent } from "undici";
 import { loadFabric } from "./loaders/fabric";
+import { loadNeoforge } from "./loaders/neoforge";
+import { loadForge } from "./loaders/forge";
 
 const authManager = new Auth("select_account");
 
-const GAME_VERSION = "1.19.2";
+const GAME_VERSION = "1.20.2";
+
+//This download agent is so important, without it, the download will be very slow and sometimes fail
+export const agent = new Agent({
+  connections: 16,
+});
 
 log.initialize();
 log.info("Log from the main process");
@@ -40,11 +47,12 @@ const createWindow = () => {
 
 app.whenReady().then(createWindow);
 
-emitter.on("launch-app", async () => {
-  await startTest();
+emitter.on("launch-app", async (e, loader) => {
+  console.log("Launching app", loader);
+  await start(loader);
 });
 
-async function startTest() {
+async function start(loader: string) {
   const list: MinecraftVersion[] = (await getVersionList()).versions;
   const aVersion: MinecraftVersion =
     list.find((v) => v.id == GAME_VERSION) || list[0]; // i just pick the first version in list here
@@ -57,11 +65,6 @@ async function startTest() {
     return console.log("Failed to get Minecraft token");
   }
 
-  //This download agent is so important, without it, the download will be very slow and sometimes fail
-  const agent = new Agent({
-    connections: 8,
-  });
-
   console.log("Downloading Minecraft", aVersion.id);
   await install(aVersion, GAME_FOLDER, {
     agent: {
@@ -70,8 +73,26 @@ async function startTest() {
     },
   });
   console.log("Installed Minecraft");
+
   copyMods();
-  const gameVersion = await loadFabric(GAME_VERSION);
+
+  let gameVersion;
+
+  switch (loader) {
+    case "fabric":
+      gameVersion = await loadFabric(GAME_VERSION);
+      break;
+    case "forge":
+      gameVersion = await loadForge(GAME_VERSION);
+      break;
+    case "neoforge":
+      gameVersion = await loadNeoforge(GAME_VERSION);
+      break;
+    default:
+      gameVersion = GAME_VERSION;
+  }
+
+  console.log("Game version", gameVersion);
 
   if (!gameVersion) {
     return console.log("Failed to install fabric loader");
