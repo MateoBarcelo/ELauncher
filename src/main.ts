@@ -1,26 +1,21 @@
-import { app, BrowserWindow, ipcMain as emitter } from "electron";
-import log from "electron-log/main";
-import { Auth } from "msmc";
+require("dotenv").config();
+import { launch, Version } from "@xmcl/core";
 import {
   getVersionList,
-  MinecraftVersion,
   install,
-  installFabric,
-  getFabricArtifacts,
-  FabricArtifacts,
-  FabricArtifactVersion,
-  FabricLoaderArtifact,
-  getFabricLoaderArtifact,
   installDependencies,
+  MinecraftVersion,
 } from "@xmcl/installer";
-import { launch, MinecraftLocation, Version } from "@xmcl/core";
+import { app, BrowserWindow, ipcMain as emitter } from "electron";
+import log from "electron-log/main";
+import { Agent } from "undici";
+import { auth } from "./auth/auth-manager";
+import { loadFabric } from "./loaders/fabric";
+import { loadForge } from "./loaders/forge";
+import { loadNeoforge } from "./loaders/neoforge";
+import { downloadMods, listBuckets } from "./services/storage";
 import { GAME_FOLDER } from "./utils/locations";
 import { insertMods } from "./utils/mod-extractor";
-import { Agent } from "undici";
-import { loadFabric } from "./loaders/fabric";
-import { loadNeoforge } from "./loaders/neoforge";
-import { loadForge } from "./loaders/forge";
-import { auth } from "./auth/auth-manager";
 
 const GAME_VERSION = "1.20.2";
 
@@ -67,7 +62,7 @@ async function start(loader: string) {
   });
   console.log("Installed Minecraft");
 
-  insertMods();
+  await downloadMods();
 
   let gameVersion;
 
