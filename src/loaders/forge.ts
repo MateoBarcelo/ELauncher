@@ -11,7 +11,6 @@ export async function loadForge(version: string): Promise<string | undefined> {
   const list: ForgeVersionList = await getForgeVersionList({
     minecraft: version,
   });
-  console.log("Forge version list: ", list.versions, list.mcversion);
 
   const versionToInstall: ForgeVersion =
     list.versions.find((ver) => ver.mcversion === version) || list.versions[0];
