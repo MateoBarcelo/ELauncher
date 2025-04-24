@@ -11,7 +11,6 @@ export async function auth(): Promise<{
   };
   accessToken: string;
 }> {
-  // Auth manager logic here
   const accessToken = getAccessToken();
 
   if (accessToken) {
