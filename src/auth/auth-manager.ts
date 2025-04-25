@@ -1,6 +1,6 @@
 import { Auth } from "msmc";
 import { getAuthStorage, updateAuth } from "./auth-storage";
-import { decodeJWT } from "../utils/auth";
+import { decodeJWT, getAvatar } from "../utils/auth";
 
 const authManager = new Auth("select_account");
 
@@ -10,6 +10,7 @@ export async function auth(): Promise<{
     id: string;
   };
   accessToken: string;
+  avatar?: string | null;
 }> {
   const accessToken = getAccessToken();
 
@@ -29,10 +30,13 @@ export async function auth(): Promise<{
     throw new Error("Failed to get token or profile");
   }
 
+  const avatar = await getAvatar(token.profile.id);
+
   // Save the token and profile to storage
   const authData = {
     profile: token.profile,
     accessToken: token.mcToken,
+    avatar,
   };
 
   updateAuth(authData);
@@ -40,6 +44,7 @@ export async function auth(): Promise<{
   return {
     profile: token.profile,
     accessToken: token.mcToken,
+    avatar: avatar,
   };
 }
 
