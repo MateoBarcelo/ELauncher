@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import os from "os";
 import process from "process";
-import { MODS_FOLDER } from "./locations";
+import { MODS_FOLDER } from "./folder-paths";
 
 const destinationPath = MODS_FOLDER;
 const sourcePath = path.join(process.cwd(), "./src/resources", "mods"); //path.join(process.resourcesPath, "mods");

@@ -6,13 +6,19 @@ import {
   getFabricLoaderArtifact,
   installFabric,
 } from "@xmcl/installer";
-import { GAME_FOLDER } from "../utils/locations";
+import { GAME_FOLDER } from "../utils/folder-paths";
 
-export async function loadFabric(version: string): Promise<string | undefined> {
+export async function loadFabric(
+  version: string,
+  loaderVersion?: string
+): Promise<string | undefined> {
   const fabricArtifacts: FabricArtifacts = await getFabricArtifacts();
-  const fabricLoader: FabricArtifactVersion =
-    fabricArtifacts.loader.find((v) => v.gameVersion === version) ||
-    fabricArtifacts.loader[0];
+  const fabricLoader: FabricArtifactVersion = loaderVersion
+    ? fabricArtifacts.loader.find((v) => v.version === loaderVersion) ||
+      fabricArtifacts.loader[0]
+    : fabricArtifacts.loader.find((v) => v.gameVersion === version) ||
+      fabricArtifacts.loader[0];
+
   console.log("Fabric loader version: ", fabricLoader.version);
 
   let fabricLoaderArtifact: FabricLoaderArtifact | null = null;
