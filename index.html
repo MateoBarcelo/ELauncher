@@ -1,15 +1,37 @@
 <!DOCTYPE html>
-  <head>
-    <title>Electron Project</title>
-  </head>
-  <body>
-    <h1>E Launcher</h1>
-    <button id="launch-button">launch</button>
-    <select id="loader-select">
-      <option value="fabric">Fabric</option>
-      <option value="neoforge">NeoForge</option>
-      <option value="forge">Forge</option>
-    </select>
-    <script src="./src/scripts/renderer.js"></script>
-  </body>
+
+<head>
+  <title>Electron Project</title>
+</head>
+
+<body>
+  <h1>E Launcher</h1>
+  <button id="launch-button">launch</button>
+  <select id="loader-select">
+    <option value="vanilla">Vanilla</option>
+    <option value="fabric">Fabric</option>
+    <option value="forge">Forge</option>
+  </select>
+  <div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px;">
+    <label for="game-directory">Game Directory:</label>
+    <div style="display: flex;"> 
+      <input type="text" id="game-directory" value="" />
+      <button id="browse-button">Browse</button>
+    </div>
+
+    <label for="java-path">Java Path:</label>
+    <div style="display: flex;">
+      <input type="text" id="java-path" value="" />
+      <button id="browse-java-button">Browse</button>
+    </div>
+
+    <label for="memory-max">Max Memory:</label>
+    <input type="text" id="memory-max" value="" />
+
+    <label for="memory-min">Min Memory:</label>
+    <input type="text" id="memory-min" value="" />
+  </div>
+  <script src="./src/scripts/renderer.js"></script>
+</body>
+
 </html>

@@ -1,5 +1,5 @@
 import { installNeoForged } from "@xmcl/installer";
-import { GAME_FOLDER } from "../utils/locations";
+import { GAME_FOLDER } from "../utils/folder-paths";
 import { Agent } from "undici";
 
 export async function loadNeoforge(
@@ -10,7 +10,7 @@ export async function loadNeoforge(
     connections: 8,
   });
 
-  // add suport for neoforge version list
+  // TO-DO: add suport for neoforge version list
   const ver = await installNeoForged("neoforge", "20.2.88", GAME_FOLDER, {
     agent: {
       //@ts-ignore
