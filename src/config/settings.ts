@@ -5,7 +5,7 @@ import servicesJson from "../resources/settings.json";
 export function getSettings(): Record<string, any> {
   checkSettingsFile();
 
-  const data = fs.readFileSync(SETTINGS_FILE(), "utf-8");
+  const data = fs.readFileSync(SETTINGS_FILE, "utf-8");
   return JSON.parse(data);
 }
 
@@ -15,16 +15,16 @@ export function updateSettings(newSettings: Record<string, any>): void {
   const currentSettings = getSettings();
   const updatedSettings = { ...currentSettings, ...newSettings };
   fs.writeFileSync(
-    SETTINGS_FILE(),
+    SETTINGS_FILE,
     JSON.stringify(updatedSettings, null, 2),
     "utf-8"
   );
 }
 
 export function checkSettingsFile(): void {
-  if (!fs.existsSync(SETTINGS_FILE())) {
+  if (!fs.existsSync(SETTINGS_FILE)) {
     fs.writeFileSync(
-      SETTINGS_FILE(),
+      SETTINGS_FILE,
       JSON.stringify(servicesJson, null, 2),
       "utf-8"
     );
