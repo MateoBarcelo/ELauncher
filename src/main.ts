@@ -13,11 +13,9 @@ import { auth } from "./auth/auth-manager";
 import { loadFabric } from "./loaders/fabric";
 import { loadForge } from "./loaders/forge";
 import { loadNeoforge } from "./loaders/neoforge";
-import { downloadMods, listBuckets } from "./services/storage";
-import { GAME_FOLDER } from "./utils/locations";
-import { insertMods } from "./utils/mod-extractor";
-
-const GAME_VERSION = "1.20.2";
+import { downloadInstance } from "./services/storage";
+import { GAME_FOLDER } from "./utils/folder-paths";
+import { getVersionConfig } from "./config/config-loader";
 
 //This download agent is so important, without it, the download will be very slow and sometimes fail
 export const agent = new Agent({
@@ -47,6 +45,17 @@ emitter.on("launch-app", async (e, loader) => {
 });
 
 async function start(loader: string) {
+  // Load config
+  const versionConfig = await getVersionConfig();
+
+  if (!versionConfig) {
+    console.log("Failed to load version config");
+    return;
+  }
+
+  const GAME_VERSION = versionConfig.version;
+
+  //Minecraft version
   const list: MinecraftVersion[] = (await getVersionList()).versions;
   const aVersion: MinecraftVersion =
     list.find((v) => v.id == GAME_VERSION) || list[0]; // i just pick the first version in list here
@@ -60,18 +69,23 @@ async function start(loader: string) {
       dispatcher: agent,
     },
   });
-  console.log("Installed Minecraft");
 
-  await downloadMods();
+  await downloadInstance();
 
   let gameVersion;
 
   switch (loader) {
     case "fabric":
-      gameVersion = await loadFabric(GAME_VERSION);
+      gameVersion = await loadFabric(
+        GAME_VERSION,
+        versionConfig.modLoaderVersion
+      );
       break;
     case "forge":
-      gameVersion = await loadForge(GAME_VERSION);
+      gameVersion = await loadForge(
+        GAME_VERSION,
+        versionConfig.modLoaderVersion
+      );
       break;
     case "neoforge":
       gameVersion = await loadNeoforge(GAME_VERSION);
