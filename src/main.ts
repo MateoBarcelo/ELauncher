@@ -126,7 +126,7 @@ async function start(loader: string) {
     },
     version: gameVersion,
     gamePath: GAME_FOLDER,
-    javaPath: "C:/Program Files/Java/jdk-21/bin/java.exe",
+    javaPath: launcherSettings.javaPath,
   });
   console.log("Installed");
 }
