@@ -16,6 +16,7 @@ import { loadNeoforge } from "./loaders/neoforge";
 import { downloadInstance } from "./services/storage";
 import { GAME_FOLDER } from "./utils/folder-paths";
 import { getVersionConfig } from "./config/config-loader";
+import { getSettings } from "./config/settings";
 
 //This download agent is so important, without it, the download will be very slow and sometimes fail
 export const agent = new Agent({
@@ -47,6 +48,10 @@ emitter.on("launch-app", async (e, loader) => {
 async function start(loader: string) {
   // Load config
   const versionConfig = await getVersionConfig();
+
+  const launcherSettings = getSettings();
+
+  console.log("Launcher settings", launcherSettings);
 
   if (!versionConfig) {
     console.log("Failed to load version config");
