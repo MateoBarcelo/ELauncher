@@ -24,7 +24,7 @@ export const agent = new Agent({
 });
 
 log.initialize();
-log.info("Log from the main process");
+
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
@@ -41,7 +41,6 @@ const createWindow = () => {
 app.whenReady().then(createWindow);
 
 emitter.on("launch-app", async (e, loader) => {
-  console.log("Launching app", loader);
   await start(loader);
 });
 
@@ -50,8 +49,6 @@ async function start(loader: string) {
   const versionConfig = await getVersionConfig();
 
   const launcherSettings = getSettings();
-
-  console.log("Launcher settings", launcherSettings);
 
   if (!versionConfig) {
     console.log("Failed to load version config");
@@ -99,8 +96,6 @@ async function start(loader: string) {
       gameVersion = GAME_VERSION;
   }
 
-  console.log("Game version", gameVersion);
-
   if (!gameVersion) {
     return console.log("Failed to install fabric loader");
   }
@@ -128,5 +123,4 @@ async function start(loader: string) {
     gamePath: GAME_FOLDER,
     javaPath: launcherSettings.javaPath,
   });
-  console.log("Installed");
 }
