@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { SETTINGS_FILE } from "../utils/folder-paths";
-import servicesJson from "../resources/settings.json";
+import servicesJson from "../resources/settings_default.json";
 
 export function getSettings(): Record<string, any> {
   checkSettingsFile();
@@ -23,6 +23,7 @@ export function updateSettings(newSettings: Record<string, any>): void {
 
 export function checkSettingsFile(): void {
   if (!fs.existsSync(SETTINGS_FILE)) {
+    console.log("Settings file not found, creating default settings file.");
     fs.writeFileSync(
       SETTINGS_FILE,
       JSON.stringify(servicesJson, null, 2),
