@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.787.0",
-    "@mclc/main": "^4.0.0",
     "@xmcl/core": "^2.13.0",
     "@xmcl/installer": "^5.4.0",
     "dotenv": "^16.5.0",
