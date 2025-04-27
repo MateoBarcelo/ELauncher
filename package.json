@@ -13,14 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.787.0",
-    "@azure/msal-node": "^3.5.0",
     "@mclc/main": "^4.0.0",
     "@xmcl/core": "^2.13.0",
     "@xmcl/installer": "^5.4.0",
     "dotenv": "^16.5.0",
     "electron": "^32.1.2",
     "electron-log": "^5.2.0",
-    "minecraft-launcher-js": "^0.1.0",
     "msmc": "^5.0.5",
     "typescript": "^5.6.2",
     "undici": "^6.20.0"
